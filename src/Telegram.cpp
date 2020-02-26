@@ -4,6 +4,7 @@
 
 #include "Telegram.h"
 #include "CoordinateGrid.h"
+#include <iostream>
 
 Telegram::Telegram(std::vector<Obstacle>&& obstacles , MODE mode)
 :m_obstacles(obstacles)

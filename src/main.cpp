@@ -14,7 +14,7 @@ static const std::string version = "LidarVisualisation version 0.2, by Intech";
 int main(int argc, char* argv[])
 {
     uint16_t W = 800, H = 800;
-    std::string ip_address = "192.168.1.6";
+    std::string ip_address = "192.168.1.120";
     int port = 17865;
     uint32_t timeout_ms = 10000;
     std::string arg;
@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
 
     sf::RenderWindow window(sf::VideoMode(W, H), "");
     window.setFramerateLimit(40);
-    TitleStatus titleStatus(window,"LidarVisualisation","Waiting lidar on 127.0.0.1:17865 ... ");
+    TitleStatus titleStatus(window,"LidarVisualisation","Waiting lidar on 192.168.1.120:17865 ... ");
     CoordinateGrid grid(window);
     Lidar lidar(grid);
 
@@ -73,18 +73,23 @@ int main(int argc, char* argv[])
         {
             if (event.type == sf::Event::Closed)
                 window.close();
-            if( event.type == sf::Event::KeyReleased )
-            {
-                if( event.key.code == sf::Keyboard::R )
+            if( event.type == sf::Event::KeyReleased ) {
+                if(event.key.code == sf::Keyboard::Escape){
+                    window.close();
+                }
+                else if (event.key.code == sf::Keyboard::R) {
                     lidar.setMode(MODE::RAW);
-                else if( event.key.code == sf::Keyboard::O )
+                    std::cout << "MODE RAW" << std::endl;
+                }else if( event.key.code == sf::Keyboard::O ) {
                     lidar.setMode(MODE::OBSTACLES);
+                    std::cout << "MODE OBSTACLES" << std::endl;
+                }
             }
         }
 
-        if( !lidar.connected() && lidar.connect(ip_address,port) )
-        {
+        if( !lidar.connected() && lidar.connect(ip_address,port) ) {
             titleStatus.setStatus("Connected !");
+            std::cout<<"Connected !"<<std::endl;
         }
 
         if( lidar.connected() )
@@ -101,6 +106,8 @@ int main(int argc, char* argv[])
 
         window.display();
     }
+
+    lidar.disconnect();
 
     return 0;
 }

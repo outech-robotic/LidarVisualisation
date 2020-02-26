@@ -4,6 +4,7 @@
 
 #include <cstring>
 #include "Lidar.h"
+#include <iostream>
 
 
 Lidar::Lidar(CoordinateGrid& grid)
@@ -39,7 +40,7 @@ bool Lidar::computeRaw(std::string& str)
     std::string rStr;
     try
     {
-        while( str.length() )
+        while( str.length() && str[0] != '\n')
         {
             pos = str.find(':');
             r = std::stof(str.substr(0,pos));
@@ -69,10 +70,9 @@ bool Lidar::computeObstacles(std::string& str)
     long int pos = 0;
     float r;
     float angle;
-
     try
     {
-        while( str.length() )
+        while( str.length() && str[0] != '\n')
         {
             pos = str.find(':');
             r = std::stof(str.substr(0,pos));
